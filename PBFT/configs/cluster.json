@@ -1,0 +1,26 @@
+{
+  "n": 7,
+  "f": 2,
+  "initialView": 1,
+  "replicas": [
+    { "id": "n1", "host": "127.0.0.1", "port": 50051, "pubkeyPemPath": "secrets/replicas/n1/ed25519.pub" },
+    { "id": "n2", "host": "127.0.0.1", "port": 50052, "pubkeyPemPath": "secrets/replicas/n2/ed25519.pub" },
+    { "id": "n3", "host": "127.0.0.1", "port": 50053, "pubkeyPemPath": "secrets/replicas/n3/ed25519.pub" },
+    { "id": "n4", "host": "127.0.0.1", "port": 50054, "pubkeyPemPath": "secrets/replicas/n4/ed25519.pub" },
+    { "id": "n5", "host": "127.0.0.1", "port": 50055, "pubkeyPemPath": "secrets/replicas/n5/ed25519.pub" },
+    { "id": "n6", "host": "127.0.0.1", "port": 50056, "pubkeyPemPath": "secrets/replicas/n6/ed25519.pub" },
+    { "id": "n7", "host": "127.0.0.1", "port": 50057, "pubkeyPemPath": "secrets/replicas/n7/ed25519.pub" }
+  ],
+  "clients": [
+    { "id": "A",  "host":"127.0.0.1", "port":60051, "pubkeyPemPath": "secrets/clients/A/ed25519.pub" },
+    { "id": "B",  "host":"127.0.0.1", "port":60051, "pubkeyPemPath": "secrets/clients/B/ed25519.pub" },
+    { "id": "C",  "host":"127.0.0.1", "port":60051, "pubkeyPemPath": "secrets/clients/C/ed25519.pub" },
+    { "id": "D",  "host":"127.0.0.1", "port":60051, "pubkeyPemPath": "secrets/clients/D/ed25519.pub" },
+    { "id": "E",  "host":"127.0.0.1", "port":60051, "pubkeyPemPath": "secrets/clients/E/ed25519.pub" },
+    { "id": "F",  "host":"127.0.0.1", "port":60051, "pubkeyPemPath": "secrets/clients/F/ed25519.pub" },
+    { "id": "G",  "host":"127.0.0.1", "port":60051, "pubkeyPemPath": "secrets/clients/G/ed25519.pub" },
+    { "id": "H",  "host":"127.0.0.1", "port":60051, "pubkeyPemPath": "secrets/clients/H/ed25519.pub" },
+    { "id": "I",  "host":"127.0.0.1", "port":60051, "pubkeyPemPath": "secrets/clients/I/ed25519.pub" },
+    { "id": "J",  "host":"127.0.0.1", "port":60051, "pubkeyPemPath": "secrets/clients/J/ed25519.pub" }
+  ]
+}

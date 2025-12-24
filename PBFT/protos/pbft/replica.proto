@@ -1,0 +1,141 @@
+syntax = "proto3";
+package pbft;
+
+import "pbft/common.proto";
+import "pbft/auth.proto";
+import "pbft/consensus.proto";
+import "pbft/client.proto";
+
+option java_multiple_files = true;
+option java_package = "pbft.proto";
+option java_outer_classname = "ReplicaProto";
+
+service ReplicaService {
+  rpc HealthCheck(HealthCheckRequest) returns (HealthCheckReply);
+
+  rpc SendPrePrepare(SignedMessage) returns (Empty);
+  rpc SendPrepare(SignedMessage) returns (Empty);
+  rpc SendCommit(SignedMessage) returns (Empty);
+  rpc SendPrepareProof(SignedMessage) returns (Empty);
+  rpc SendCommitProof(SignedMessage) returns (Empty);
+
+  rpc SendViewChange(SignedMessage) returns (Empty);
+  rpc SendNewView(SignedMessage) returns (Empty);
+
+  rpc SendCheckpoint(SignedMessage) returns (Empty);
+
+  rpc GetCheckpointState(CheckpointQuery) returns (CheckpointState);
+
+  rpc GetClientRequest(RequestDigest) returns (SignedMessage);
+}
+
+message SeqQuery {
+  int64 view = 1;
+  int64 seq  = 2;
+  bool aggregate = 3;
+}
+message LogEntry  {
+  int64 view = 1;
+  int64 seq  = 2;
+  string client_id = 3;
+  int64 req_seq = 4;
+  string status = 5;
+  string request_digest = 6;
+  string operation = 7;
+  bool pre_prepared = 8;
+  bool prepared = 9;
+  bool committed = 10;
+  bool executed = 11;
+}
+message PrintLogReply { repeated LogEntry entries = 1; }
+message StatusEntry {
+  string replica_id = 1;
+  string status = 2;
+}
+message StatusReply { repeated StatusEntry statuses = 1; }
+message BalanceEntry {
+  string account = 1;
+  int64 balance = 2;
+}
+message PrintDBReply { repeated BalanceEntry balances = 1; }
+message ViewLog {
+  repeated string new_views = 1;
+  bool has_last = 2;
+  int64 last_view = 3;
+  int64 s = 4;
+  int64 h = 5;
+  NewView last_new_view = 6;
+  repeated NewView new_views_full = 7;
+  repeated int64 s_cov = 8;
+  repeated int64 h_cov = 9;
+}
+
+message PrintCheckpointReply {
+  bool enabled = 1;
+  int64 period = 2;
+  int64 last_stable_seq = 3;
+  bytes last_stable_digest = 4;
+  int32 stable_signers = 5;
+  repeated string stable_signer_ids = 6;
+  bool has_local_snapshot = 7;
+  repeated LogEntry checkpoint_entries = 8;
+}
+
+service AdminService {
+  rpc PrintDB(Empty) returns (PrintDBReply);
+  rpc PrintLog(Empty) returns (PrintLogReply);
+  rpc PrintCompleteLog(Empty) returns (PrintCompleteLogReply);
+  rpc PrintCheckpoint(Empty) returns (PrintCheckpointReply);
+  rpc PrintStatus(SeqQuery) returns (StatusReply);
+  rpc PrintView(Empty) returns (ViewLog);
+  rpc Reset(Empty) returns (Empty);
+  rpc SetLiveNodes(LiveNodesRequest) returns (Empty);
+  rpc SetAttack(AttackSpec) returns (Empty);
+}
+
+message LiveNodesRequest { repeated string node_ids = 1; }
+
+message AttackSpec {
+  bool byzantine = 1;
+  repeated string types = 2;
+  repeated string dark_targets = 3;
+  repeated string equiv_targets = 4;
+  int64 time_delay_ms = 5;
+}
+
+message RequestDigest {
+  bytes request_digest = 1;
+  string client_id = 2;
+  int64 req_seq = 3;
+}
+
+message CheckpointQuery {
+  int64 seq = 1;
+  bytes state_digest = 2;
+}
+
+message CheckpointState {
+  int64 seq = 1;
+  bytes state_digest = 2;
+  bytes payload = 3;
+}
+
+message CompleteLogEntry {
+  int64 ts_millis = 1;
+  string direction = 2;
+  string type = 3;
+  int64 view = 4;
+  int64 seq = 5;
+  string from = 6;
+  string to = 7;
+  string client_id = 8;
+  int64 req_seq = 9;
+  string request_digest = 10;
+  string status = 11;
+  string notes = 12;
+}
+
+message PrintCompleteLogReply {
+  repeated CompleteLogEntry entries = 1;
+  repeated LogEntry state_entries = 2;
+}

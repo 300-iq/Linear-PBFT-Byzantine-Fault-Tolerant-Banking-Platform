@@ -1,0 +1,88 @@
+syntax = "proto3";
+package pbft;
+
+import "pbft/auth.proto";
+import "pbft/common.proto";
+
+option java_multiple_files = true;
+option java_package = "pbft.proto";
+option java_outer_classname = "ClientProto";
+
+message Transfer {
+  string from = 1;   
+  string to   = 2;
+  int64 amount = 3;
+}
+
+message Balance {
+  string account = 1;
+}
+
+message DepositChecking {
+  string account = 1;
+  int64 amount = 2;
+}
+
+message TransactSavings {
+  string account = 1;
+  int64 amount = 2;
+}
+
+message Amalgamate {
+  string src = 1;
+  string dst = 2;
+}
+
+message WriteCheck {
+  string account = 1;
+  int64 amount = 2;
+}
+
+message SendPayment {
+  string src = 1;
+  string dst = 2;
+  int64 amount = 3;
+}
+
+message Operation {
+  oneof op {
+    Transfer transfer = 1;
+    Balance  balance  = 2;
+    DepositChecking deposit_checking = 3;
+    TransactSavings transact_savings = 4;
+    Amalgamate amalgamate = 5;
+    WriteCheck write_check = 6;
+    SendPayment send_payment = 7;
+  }
+}
+
+
+message ClientRequest {
+  string client_id = 1;
+  int64  req_seq   = 2;
+  Operation operation = 3;
+  bytes  request_digest = 11;
+}
+
+message ClientReply {
+  string client_id = 1;
+  int64  req_seq   = 2;
+  int64  view      = 3;
+  string replica_id = 4;
+  oneof result {
+    int64 balance = 10;
+    string status       = 11;
+  }
+}
+
+service ClientReplyService {
+  rpc Deliver(SignedMessage) returns (Empty);
+}
+
+service ClientService {
+  rpc HealthCheck(HealthCheckRequest) returns (HealthCheckReply);
+
+  rpc Submit(SignedMessage) returns (SignedMessage);
+  rpc ReadOnly(SignedMessage) returns (SignedMessage);
+}
+

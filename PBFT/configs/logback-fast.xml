@@ -1,0 +1,21 @@
+<configuration scan="false">
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <logger name="io.grpc" level="ERROR"/>
+    <logger name="io.netty" level="ERROR"/>
+
+    <logger name="pbft.replica" level="WARN" additivity="false">
+        <appender-ref ref="STDOUT"/>
+    </logger>
+    <logger name="pbft.client" level="WARN" additivity="false">
+        <appender-ref ref="STDOUT"/>
+    </logger>
+
+    <root level="WARN">
+        <appender-ref ref="STDOUT"/>
+    </root>
+</configuration>

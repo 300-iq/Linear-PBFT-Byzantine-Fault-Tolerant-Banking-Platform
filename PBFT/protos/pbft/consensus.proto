@@ -1,0 +1,78 @@
+syntax = "proto3";
+package pbft;
+import "pbft/auth.proto";
+
+option java_multiple_files = true;
+option java_package = "pbft.proto";
+option java_outer_classname = "ConsensusProto";
+
+
+message PrePrepare {
+  int64 view = 1;
+  int64 seq  = 2;
+  bytes request_digest = 3;
+  string client_id = 4;
+  int64  req_seq   = 5;
+  SignedMessage client_request = 10;
+}
+
+message Prepare {
+  int64 view = 1;
+  int64 seq  = 2;
+  bytes request_digest = 3;
+  string replica_id = 4;
+}
+
+message Commit {
+  int64 view = 1;
+  int64 seq  = 2;
+  bytes request_digest = 3;
+  string replica_id = 4;
+}
+
+
+message PrepareProof {
+  int64 view = 1;
+  int64 seq  = 2;
+  bytes request_digest = 3;
+  repeated SignedMessage signed_prepares = 10;
+}
+
+message CommitProof {
+  int64 view = 1;
+  int64 seq  = 2;
+  bytes request_digest = 3;
+  repeated SignedMessage signed_commits = 10;
+}
+
+
+message Checkpoint {
+  int64 seq = 1;
+  bytes state_digest = 2;
+  string replica_id = 3;
+}
+
+
+message PreparedEntry {
+  int64 view = 1;   
+  int64 seq  = 2;
+  bytes request_digest = 3;
+  string client_id = 4;     
+  int64  req_seq   = 5;     
+  PrepareProof proof = 20;
+}
+
+message ViewChange {
+  int64 new_view = 1;
+  int64 last_stable_seq = 2;
+  bytes checkpoint_digest = 3;
+  repeated PreparedEntry Pset = 10;
+  repeated SignedMessage checkpoint_msgs = 11;
+  string replica_id = 20;
+}
+
+message NewView {
+  int64 new_view = 1;
+  repeated SignedMessage view_changes = 10;
+  repeated PrePrepare selected_preprepares = 11;
+}

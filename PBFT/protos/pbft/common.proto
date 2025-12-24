@@ -1,0 +1,15 @@
+syntax = "proto3";
+package pbft;
+
+option java_multiple_files = true;
+option java_package = "pbft.proto";
+option java_outer_classname = "CommonProto";
+
+message Empty {}
+
+message NodeId { string id = 1; }
+message View   { int64 number = 1; }
+message Signature { bytes sig = 1; }
+
+message HealthCheckRequest { string who = 1; }
+message HealthCheckReply   { string status = 1; }

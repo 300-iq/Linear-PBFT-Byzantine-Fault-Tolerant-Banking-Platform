@@ -1,0 +1,15 @@
+syntax = "proto3";
+package pbft;
+
+option java_multiple_files = true;
+option java_package = "pbft.proto";
+option java_outer_classname = "AuthProto";
+
+message SignedMessage {
+  string type_url = 1;
+  bytes  payload  = 2;
+  string signer_id = 3;
+  bytes  signature = 4;
+  int64  view = 5;
+  int64  seq  = 6;
+}
